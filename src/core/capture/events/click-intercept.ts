@@ -1,16 +1,11 @@
-import { isTextField } from '../dom/element-utils';
-
 const replayed = new WeakSet<Event>();
 
 export function isReplayedClick(event: Event): boolean {
   return replayed.has(event);
 }
 
-export function shouldInterceptClick(target: HTMLElement, event: MouseEvent): boolean {
-  if (!event.isTrusted || event.shiftKey) return false;
-  if (target instanceof HTMLSelectElement || target instanceof HTMLOptionElement) return false;
-  if (target.isContentEditable) return false;
-  return !isTextField(target);
+export function shouldInterceptClick(_target: HTMLElement, _event: MouseEvent): boolean {
+  return false;
 }
 
 export function replayInit(event: MouseEvent): PointerEventInit {

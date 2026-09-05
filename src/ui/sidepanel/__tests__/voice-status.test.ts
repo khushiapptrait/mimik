@@ -18,7 +18,8 @@ import {
 const LOCALES = ['en', 'es', 'fr', 'pt-BR'];
 
 function voiceKeysIn(locale: string): string[] {
-  const lines = readFileSync(join(process.cwd(), 'src/locales', `${locale}.yml`), 'utf8').split('\n');
+  const content = readFileSync(join(process.cwd(), 'src/locales', `${locale}.yml`), 'utf8').replace(/\r\n/g, '\n');
+  const lines = content.split('\n');
   const start = lines.indexOf('voice:');
   const keys: string[] = [];
   for (const line of lines.slice(start + 1)) {

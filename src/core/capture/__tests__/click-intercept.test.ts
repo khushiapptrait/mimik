@@ -56,8 +56,8 @@ describe('shouldInterceptClick', () => {
     expect(shouldInterceptClick(el('<textarea></textarea>'), click())).toBe(false);
   });
 
-  it('still intercepts a checkbox, which is a click and not typing', () => {
-    expect(shouldInterceptClick(el('<input type="checkbox">'), click())).toBe(true);
+  it('leaves checkboxes alone so native toggling is not blocked', () => {
+    expect(shouldInterceptClick(el('<input type="checkbox">'), click())).toBe(false);
   });
 });
 

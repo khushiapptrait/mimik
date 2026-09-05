@@ -1,11 +1,20 @@
+import { isTextField } from '../dom/element-utils';
+
 const replayed = new WeakSet<Event>();
 
 export function isReplayedClick(event: Event): boolean {
   return replayed.has(event);
 }
 
-export function shouldInterceptClick(_target: HTMLElement, _event: MouseEvent): boolean {
-  return false;
+export function shouldInterceptClick(target: HTMLElement, event: MouseEvent): boolean {
+  if (!event.isTrusted || event.shiftKey) return false;
+  if (target instanceof HTMLSelectElement || target instanceof HTMLOptionElement) return false;
+  if (target.isContentEditable) return false;
+  if (isTextField(target)) return false;
+  if (target instanceof HTMLInputElement && (target.type === 'checkbox' || target.type === 'radio')) return false;
+  if (target.querySelector('input[type="checkbox"], input[type="radio"]')) return false;
+  if (target.closest('label')) return false;
+  return true;
 }
 
 export function replayInit(event: MouseEvent): PointerEventInit {

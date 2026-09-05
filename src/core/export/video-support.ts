@@ -3,7 +3,7 @@ import type { VideoResolution } from '@/core/export/options';
 export const FRAME_WIDTH = 1280;
 export const FRAME_HEIGHT = 720;
 
-export const FRAME_FILL = '#0B0A1F';
+export const FRAME_FILL = '#363B38';
 
 export const FPS = 30;
 export const STEP_ZOOMED_OUT_SEC = 1.5;

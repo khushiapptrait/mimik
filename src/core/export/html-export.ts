@@ -159,21 +159,7 @@ export async function exportGuideAsHTML(
       </div>
       ${guide.description ? `<p style="font-size:16px;color:#6B7280;line-height:1.6;margin-top:14px;max-width:60ch;overflow-wrap:anywhere;${clamp(MAX_DESC_LINES)}">${escapeHtml(guide.description)}</p>` : ''}
     </div>
-    <div style="border-top:2px solid #1E1B4B;padding-top:18px;display:flex;align-items:baseline;">
-      <div style="flex:0 0 190px;">
-        <div style="font-size:11px;font-weight:700;color:#6B7280;letter-spacing:0.06em;">${i18n.t('export.steps').toUpperCase()}</div>
-        <div style="font-size:38px;font-weight:700;color:${accent};line-height:1;${metaValue}">${String(actionSteps(steps).length).padStart(2, '0')}</div>
-      </div>
-      ${metaCell(i18n.t('export.created').toUpperCase(), formatDate(guide.createdAt))}
-      ${
-        domain
-          ? metaCell(
-              i18n.t('export.source').toUpperCase(),
-              `<a href="https://${escapeHtml(domain)}" target="_blank" rel="noopener" style="color:${accent};">${escapeHtml(domain)}</a>`,
-            )
-          : ''
-      }
-    </div>
+    <div style="border-top:2px solid #1E1B4B;padding-top:18px;"></div>
   </header>`
     : `<header data-doc-header="true" style="display:flex;align-items:center;gap:16px;margin-bottom:40px;padding-bottom:14px;border-bottom:1px solid #E5E7EB;">
     <h1 style="flex:1;min-width:0;font-size:20px;font-weight:700;line-height:1.2;overflow-wrap:anywhere;${clamp(1)}">${escapeHtml(guide.title)}</h1>

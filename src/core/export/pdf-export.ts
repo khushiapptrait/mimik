@@ -126,38 +126,6 @@ export async function exportGuideAsPDF(
     doc.setDrawColor(...INK);
     doc.setLineWidth(0.4);
     doc.line(MARGIN, y, RIGHT, y);
-
-    const yLabel = y + 12;
-    const yValue = yLabel + META_DROP;
-    const drawLabel = (text: string, x: number) => {
-      doc.setFontSize(7.5);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(...MUTED);
-      doc.text(text, x, yLabel, { charSpace: 0.4 });
-    };
-
-    const yText = yValue - META_VALUE_LIFT;
-
-    drawLabel(i18n.t('export.steps').toUpperCase(), MARGIN);
-    doc.setFontSize(META_NUM_SIZE);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(...accent);
-    doc.text(String(actions.length).padStart(2, '0'), MARGIN, yValue);
-
-    drawLabel(i18n.t('export.created').toUpperCase(), MARGIN + META_COL_W);
-    doc.setFontSize(META_VALUE_SIZE);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(...INK);
-    doc.text(formatDate(guide.createdAt), MARGIN + META_COL_W, yText);
-
-    if (domain) {
-      const x = MARGIN + META_COL_W * 2;
-      drawLabel(i18n.t('export.source').toUpperCase(), x);
-      doc.setFontSize(META_VALUE_SIZE);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(...accent);
-      doc.textWithLink(domain, x, yText, { url: `https://${domain}` });
-    }
   }
   const pageSteps: number[][] = [];
   const coverPages = opts.cover ? 1 : 0;

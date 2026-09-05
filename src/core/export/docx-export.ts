@@ -179,54 +179,7 @@ function buildCover(guide: Guide, steps: Step[], domain: string | null, brand: B
     children: [],
   });
 
-  const metaKeys = [i18n.t('export.steps').toUpperCase(), i18n.t('export.created').toUpperCase()];
-  const metaValues: Paragraph[][] = [
-    [
-      new Paragraph({
-        children: [
-          new TextRun({
-            text: String(actionSteps(steps).length).padStart(2, '0'),
-            bold: true,
-            color: accent,
-            size: 60,
-            font: DOCX_FONT_FAMILY,
-          }),
-        ],
-      }),
-    ],
-    [
-      new Paragraph({
-        children: [new TextRun({ text: formatDate(guide.createdAt), color: INK, size: 22, font: DOCX_FONT_FAMILY })],
-      }),
-    ],
-  ];
-
-  if (domain) {
-    metaKeys.push(i18n.t('export.source').toUpperCase());
-    metaValues.push([
-      new Paragraph({
-        children: [
-          new ExternalHyperlink({
-            link: `https://${domain}`,
-            children: [new TextRun({ text: domain, color: accent, size: 22, font: DOCX_FONT_FAMILY })],
-          }),
-        ],
-      }),
-    ]);
-  }
-
-  const widths = metaKeys.map(() => META_COL_MM);
-  const meta = new Table({
-    width: { size: dxa(CONTENT_MM), type: WidthType.DXA },
-    layout: TableLayoutType.FIXED,
-    columnWidths: widths.map((w) => dxa(w)),
-    rows: [
-      new TableRow({ cantSplit: true, children: metaKeys.map((k) => plainCell([label(k)], META_COL_MM, 4, true)) }),
-      new TableRow({ cantSplit: true, children: metaValues.map((v) => plainCell(v, META_COL_MM, 4, true)) }),
-    ],
-  });
-
-  return [head, rule, meta];
+  return [head, rule];
 }
 
 async function buildImageParagraph(

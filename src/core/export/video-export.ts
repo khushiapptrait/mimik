@@ -3,7 +3,6 @@ import type { Branding } from '@/core/export/branding';
 import { dataUrlToBytes, fitLogo, loadBranding } from '@/core/export/branding';
 import type { ExportOptions } from '@/core/export/options';
 import { loadExportOptions } from '@/core/export/options';
-import { extractDomain, formatDate } from '@/core/export/utils';
 import {
   FPS,
   FRAME_FILL,
@@ -32,7 +31,7 @@ const ZOOM_PAD_RATIO = 0.15;
 const MAX_UPSCALE = 1.5;
 const RESERVE_PASSES = 3;
 
-const BACKDROP = '#1E1B4B';
+const BACKDROP = '#363B38';
 const MUTED = '#9CA3AF';
 const ON_DARK = '#FFFFFF';
 
@@ -64,7 +63,6 @@ const CURSOR_PRESS_SEC = 0.16;
 const CURSOR_PRESS_SCALE = 0.86;
 
 const COVER_MARGIN = 96;
-const COVER_CELL_WIDTH = 300;
 
 const RENDER_OPTIONS = { format: 'image/webp', quality: 0.9 } as const;
 
@@ -622,23 +620,6 @@ async function drawCardFrame(ctx: Ctx, guide: Guide, steps: Step[], brand: Brand
   ctx.lineTo(FRAME_WIDTH - COVER_MARGIN, y);
   ctx.stroke();
   y += 26;
-
-  const domain = extractDomain(steps);
-  const cells: Array<[string, string]> = [
-    [i18n.t('export.steps').toUpperCase(), String(steps.length).padStart(2, '0')],
-    [i18n.t('export.created').toUpperCase(), formatDate(guide.createdAt)],
-  ];
-  if (domain) cells.push([i18n.t('export.source').toUpperCase(), domain]);
-
-  cells.forEach(([label, value], index) => {
-    const x = COVER_MARGIN + index * COVER_CELL_WIDTH;
-    ctx.fillStyle = MUTED;
-    ctx.font = '700 12px Poppins, sans-serif';
-    ctx.fillText(label, x, y);
-    ctx.fillStyle = index === 0 ? brand.accent : ON_DARK;
-    ctx.font = '700 30px Poppins, sans-serif';
-    ctx.fillText(value, x, y + 20);
-  });
 
   if (brand.logo) {
     const size = fitLogo(brand.logo, 200, 64);

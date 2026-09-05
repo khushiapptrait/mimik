@@ -19,7 +19,6 @@ import { InputSession } from './input-session';
 const DEDUP_MS = 300;
 const DRAG_MIN_PX = 30;
 const INTERCEPT_DELAY_MS = 100;
-const PAINT_FRAMES = 3;
 const CAPTURE_BUDGET_MS = 2500;
 const EMBED_TAGS = new Set(['IFRAME', 'EMBED', 'OBJECT']);
 const EMBED_SELECTOR = 'iframe, embed, object';
@@ -31,17 +30,6 @@ function focusInEmbed(): boolean {
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function waitForPaint(): Promise<void> {
-  return new Promise((resolve) => {
-    let remaining = PAINT_FRAMES;
-    const tick = () => {
-      if (--remaining <= 0) resolve();
-      else requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  });
 }
 
 let lastClickTarget: Element | null = null;
@@ -117,7 +105,6 @@ class CaptureController {
     this.busy = true;
     this.ring.hide();
     this.queue.add(async () => {
-      await waitForPaint();
       await task();
     });
     this.queue.onIdle().then(() => {

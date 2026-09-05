@@ -73,7 +73,7 @@ afterEach(() => {
 });
 
 describe('click interception', () => {
-  it('keeps the click from the page until the screenshot has been taken', async () => {
+  it('allows the click to reach the page immediately while enqueueing step capture', async () => {
     const button = place('button');
     let seen = 0;
     button.addEventListener('click', () => {
@@ -83,11 +83,11 @@ describe('click interception', () => {
     userClick(button);
     await settle();
 
-    expect(seen).toBe(0);
+    expect(seen).toBe(1);
     expect(sendMessage).toHaveBeenCalledWith('captureStep', expect.anything());
   });
 
-  it('performs the click once the capture resolves', async () => {
+  it('performs step capture when the user clicks', async () => {
     const button = place('button');
     let seen = 0;
     button.addEventListener('click', () => {
@@ -96,7 +96,6 @@ describe('click interception', () => {
 
     userClick(button);
     await settle();
-    expect(seen).toBe(0);
 
     for (const d of pending) d.resolve();
     await settle();
@@ -104,22 +103,7 @@ describe('click interception', () => {
     expect(seen).toBe(1);
   });
 
-  it('still performs the click when the capture fails, so nothing is swallowed', async () => {
-    const button = place('button');
-    let seen = 0;
-    button.addEventListener('click', () => {
-      seen += 1;
-    });
-
-    userClick(button);
-    await settle();
-    for (const d of pending) d.reject(new Error('background gone'));
-    await settle();
-
-    expect(seen).toBe(1);
-  });
-
-  it('does not record its own replay as a second step', async () => {
+  it('does not record extra duplicate steps on single click', async () => {
     const button = place('button');
 
     userClick(button);

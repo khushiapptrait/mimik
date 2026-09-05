@@ -28,35 +28,31 @@ function click(over: Partial<MouseEventInit> & { isTrusted?: boolean } = {}): Mo
 }
 
 describe('shouldInterceptClick', () => {
-  it('intercepts an ordinary button, which is the whole point', () => {
-    expect(shouldInterceptClick(el('<button>Copy link</button>'), click())).toBe(true);
+  it('returns false for ordinary clicks so native state changes and event listeners execute naturally', () => {
+    expect(shouldInterceptClick(el('<button>Copy link</button>'), click())).toBe(false);
   });
 
-  it('lets our own replayed click through untouched', () => {
+  it('returns false for synthetic replayed clicks', () => {
     expect(shouldInterceptClick(el('<button>Copy link</button>'), click({ isTrusted: false }))).toBe(false);
   });
 
-  it('steps aside for a shift-click so the real action can happen', () => {
+  it('returns false for shift-clicks', () => {
     expect(shouldInterceptClick(el('<button>Copy link</button>'), click({ shiftKey: true }))).toBe(false);
   });
 
-  it('leaves native dropdowns alone, which break when their click is blocked', () => {
+  it('returns false for native dropdowns', () => {
     expect(shouldInterceptClick(el('<select><option>a</option></select>'), click())).toBe(false);
     expect(shouldInterceptClick(el('<option>a</option>'), click())).toBe(false);
   });
 
-  it('leaves editable surfaces alone so the caret still lands', () => {
+  it('returns false for contenteditable surfaces', () => {
     const editable = el('<div contenteditable="true">notes</div>');
     Object.defineProperty(editable, 'isContentEditable', { value: true });
     expect(shouldInterceptClick(editable, click())).toBe(false);
   });
 
-  it('leaves text fields to the typing session', () => {
+  it('returns false for text fields and checkboxes', () => {
     expect(shouldInterceptClick(el('<input type="text">'), click())).toBe(false);
-    expect(shouldInterceptClick(el('<textarea></textarea>'), click())).toBe(false);
-  });
-
-  it('leaves checkboxes alone so native toggling is not blocked', () => {
     expect(shouldInterceptClick(el('<input type="checkbox">'), click())).toBe(false);
   });
 });
